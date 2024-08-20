@@ -1,0 +1,70 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define MAX 2005
+int V,E;
+vector<int> graph[MAX];
+
+int level[MAX],low[MAX],res;
+bool arr[MAX];
+stack<int> stak;
+
+void tarjan(int pos, int lvl){
+    level[pos] = low[pos] = lvl;
+    stak.push(pos);
+    arr[pos] = true;
+
+    for(int i = graph[pos].size() - 1,to;i >= 0;--i){
+        to = graph[pos][i];
+        //cout<<to<<" to "<<endl;
+
+        if(level[to] == -1){
+            tarjan(to,lvl + 1);
+            low[pos] = min(low[pos],low[to]);
+            ///cout<<low[pos]<<" pos "<<endl;
+        }else if(arr[to]) low[pos] = min(low[pos],low[to]);
+    }
+
+    if(low[pos] == lvl){
+        while(true){
+            int cur = stak.top();
+            stak.pop();
+            arr[cur] = true;
+            if(cur == pos) break;
+        }
+
+        res++;
+    }
+}
+
+int main(){
+    int u,v,t;
+    while(true){
+        scanf("%d %d",&V,&E);
+        if(V == 0) break;
+        for(int i = 1;i <= V;++i)
+            graph[i].clear();
+
+        for(int i = 0;i < E;++i){
+            scanf("%d %d %d",&u,&v,&t);
+            graph[u].push_back(v);
+            if(t == 2){
+                graph[v].push_back(u);
+            }
+        }
+
+        memset(level,-1,sizeof level);
+        memset(arr,false,sizeof arr);
+        res = 0;
+        for(int i = 1;i <= V;++i)
+            if(level[i] == -1)
+                tarjan(i,0);
+
+        if(res==1){
+            printf("%d\n",1);
+        }else{
+            printf("%d\n",0);
+        }
+    }
+
+    return 0;
+}

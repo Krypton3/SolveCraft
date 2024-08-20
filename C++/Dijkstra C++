@@ -1,0 +1,72 @@
+#include<bits/stdc++.h>
+#define INF 10000000
+using namespace std;
+int s,t,n,m;
+struct Pair{
+    int n;
+    int w;
+    Pair(int n1,int w1){
+        n=n1;
+        w=w1;
+    }
+    bool operator < (const Pair &a)const
+    {
+        return (w>a.w);
+    }
+};
+int dist[20000+5];
+vector<Pair> g[20000+5];
+priority_queue<Pair> pq;
+int d()
+{
+    dist[s]=0;
+    pq.push(Pair(s,0));
+    while(!pq.empty()){
+        int u=pq.top().n;
+        pq.pop();
+        if(u==t){
+            break;
+        }
+        for(int i=0;i<g[u].size();i++){
+            int v=g[u][i].n;
+            int w=g[u][i].w;
+            if(dist[v]>dist[u]+w){
+                dist[v]=dist[u]+w;
+                pq.push(Pair(v,dist[v]));
+            }
+        }
+    }
+    return dist[t];
+}
+void Remove()
+{
+     for(int d=0;d<n;d++){
+            g[d].clear();
+            dist[d]=INF;
+        }
+        //memset(dist,INF,sizeof(dist));
+        while(!pq.empty()){
+            pq.pop();
+        }
+}
+int main()
+{
+    int test,u,v,w;
+    scanf("%d",&test);
+    for(int p=1;p<=test;p++){
+        scanf("%d %d %d %d",&n,&m,&s,&t);
+        Remove();
+        for(int i=0;i<m;i++){
+            scanf("%d %d %d",&u,&v,&w);
+            g[u].push_back(Pair(v,w));
+            g[v].push_back(Pair(u,w));
+        }
+        int res=d();
+        if(res!=INF){
+            printf("Case #%d: %d\n",p,res);
+        }else{
+            printf("Case #%d: unreachable\n",p);
+        }
+    }
+    return 0;
+}

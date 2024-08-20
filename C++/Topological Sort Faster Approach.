@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define getint(a) scanf("%d", &a)
+map<string,int> pos;
+vector<string> str;
+int arr[101];
+list<int> *adj;
+int main()
+{
+    int number,relate,a,b;
+    string took,p,q;
+    int tot=0;
+    while(getint(number)==1){
+        pos.clear();
+        str.clear();
+        memset(arr,0,sizeof(arr));
+        adj=new list<int>[number];
+        for(int i=0;i<number;i++){
+            cin>>took;
+            pos[took]=i;
+            str.push_back(took);
+        }
+        getint(relate);
+        for(int i=0;i<relate;i++){
+            cin>>p;
+            cin>>q;
+            int i2=pos[p];
+            int i3=pos[q];
+            adj[i2].push_back(i3);
+            arr[i3]++;
+        }
+        int c=0,index;
+        printf("Case #%d: Dilbert should drink beverages in this order: ",++tot);
+        while(true){
+            if(c==number){
+                break;
+            }
+            for(int i=0;i<number;i++){
+                if(arr[i]==0){
+                    if(c==(number-1)){
+                        cout<<str[i]<<".";
+                    }else{
+                        cout<<str[i]<<" ";
+                    }
+                    arr[i]=-1;
+                    c++;
+                    list<int>::iterator j;
+                        for(j=adj[i].begin();j!=adj[i].end();j++){
+                                arr[*j]--;
+                        }
+                        break;
+                }
+            }
+        }
+        cout<<"\n";
+          cout<<"\n";
+    }
+    return 0;
+}

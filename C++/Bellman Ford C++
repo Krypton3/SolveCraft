@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define MX 2000
+struct p{
+    int a,b,cost;
+} bell[MX+5];
+bool BellmanFord(int n, int m)
+{
+    int cost[n+5];
+    bool t=false;
+    cost[0]=0;
+    for(int i=1; i<n; i++){
+        cost[i]=1e9;
+    }
+    for(int i=0; i<n-1; i++){
+        for(int j=0; j<m; j++){
+            if(cost[bell[j].b]>cost[bell[j].a]+bell[j].cost){
+                cost[bell[j].b]=cost[bell[j].a]+bell[j].cost;
+            }
+        }
+    }
+    for(int i=0; i<m; i++){
+        if(cost[bell[i].b]>cost[bell[i].a]+bell[i].cost){
+            t=true;
+        }
+    }
+
+return t;
+}
+int main()
+{
+    int test, n, m;
+    cin>>test;
+    while(test--)
+    {
+        cin>>n>>m;
+        for(int i=0; i<m; i++){
+            cin>>bell[i].a>>bell[i].b>>bell[i].cost;
+        }
+
+        if(BellmanFord(n, m)){
+            cout<<"possible"<<endl;
+        }else{
+            cout<<"not possible"<<endl;
+        }
+
+    }
+    return 0;
+}

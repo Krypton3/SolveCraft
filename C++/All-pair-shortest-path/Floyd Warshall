@@ -1,0 +1,52 @@
+// Uva 821
+#include<bits/stdc++.h>
+using namespace std;
+#define MAX 102
+#define INF 1000000
+int arr[MAX][MAX];
+int main()
+{
+    int u,v,cot=0;
+    while(true){
+        scanf("%d %d",&u,&v);
+        if(u==0 && v==0){
+            break;
+        }
+        cot++;
+       for(int i=1;i<MAX;i++){
+        for(int j=1;j<MAX;j++){
+            arr[i][j]=INF;
+        }
+       }
+        while(u>0 && v>0){
+            arr[u][v]=1;
+            arr[u][u]=arr[v][v]=0;
+            scanf("%d %d",&u,&v);
+        }
+        for(int k=1;k<MAX;k++){
+            for(int i=1;i<MAX;i++){
+                for(int j=1;j<MAX;j++){
+                    if(i==j) continue;
+                    if(arr[i][j]>arr[i][k]+arr[k][j]){
+                        arr[i][j]=arr[i][k]+arr[k][j];
+                    }
+                }
+            }
+        }
+        int total=0;
+        double sum=0;
+        for(int i=1;i<MAX;i++){
+            for(int j=1;j<MAX;j++){
+                if(i==j && arr[i][j]==0){
+                    total++;
+                }else if(i!=j && arr[i][j]!=INF){
+                    sum+=arr[i][j];
+                }
+            }
+        }
+        double take=total*(total-1);
+        double res=(sum/take);
+        printf("Case %d: average length between pages = %.3lf clicks\n",cot,res);
+    }
+    return 0;
+}

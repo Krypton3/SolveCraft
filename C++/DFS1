@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Graph
+{
+    int V;
+    list<int> *adj;
+    void dfsRun(int v,bool visited[]);
+public:
+    Graph(int V);
+    void addEdge(int v,int w);
+    void dfs(int s);
+};
+Graph::Graph(int V)
+{
+    this->V=V;
+    adj=new list<int>[V];
+}
+void Graph::addEdge(int v,int w)
+{
+    adj[v].push_back(w);
+}
+void Graph::dfsRun(int v,bool visited[])
+{
+    visited[v]=true;
+    cout<<v<<" ";
+    list<int>::iterator i;
+    for(i=adj[v].begin();i!=adj[v].end();i++){
+        if(!visited[*i]){
+            dfsRun(*i,visited);
+        }
+    }
+}
+void Graph::dfs(int s)
+{
+    bool *visited=new bool[V];
+    for(int i=0;i<V;i++){
+        visited[i]=false;
+    }
+    dfsRun(s,visited);
+}
+int main()
+{
+int test;
+    scanf("%d",&test);
+    for(int p=1;p<=test;p++){
+        int v,w;
+        scanf("%d%d",&v,&w);
+        Graph g(v);
+        for(int i=0;i<w;i++){
+            int a,b;
+            scanf("%d%d",&a,&b);
+            g.addEdge(a,b);
+        }
+        cout<<"The Depth Search Will be: "<<endl;
+        int s;
+        scanf("%d",&s);
+        g.dfs(s);
+    }
+    return 0;
+}

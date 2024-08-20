@@ -1,0 +1,52 @@
+//Author: Krypton3
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.*;
+public class BellmanFord {
+    public static void main(String[] args) throws FileNotFoundException {
+        Scanner in=new Scanner(new FileReader("ShortestPaths.txt"));
+        int n=in.nextInt();
+        for(int c=1;c<=n;c++){
+            int N=in.nextInt();
+            int M=in.nextInt();
+            int[] dist=new int[N];
+            Edge[] ar=new Edge[M];
+            System.out.printf("Case #%d:\n", c);
+            for(int i=1;i<N;i++){
+                dist[i]=Integer.MAX_VALUE;
+            }
+            for(int i=0;i<M;i++){
+                ar[i]=new Edge(in.nextInt(),in.nextInt(),in.nextInt());
+            }
+            for(int i=0;i<N-1;i++){
+                for(int j=0;j<M;j++){
+                    Edge e=ar[j];
+                    if(dist[e.d]>dist[e.s]+e.w){
+                        dist[e.d]=dist[e.s]+e.w;
+                    }
+                }
+            }
+            boolean flag=false;
+            for(int j=0;j<M;j++){
+                Edge e=ar[j];
+                if(dist[e.d]>dist[e.s]+e.w){
+                    System.out.println("  No solution -- graph has a negative cycle.");
+                    flag=true;
+                }
+            }
+             for(int i = 0; !flag && i < N; i++)
+                    System.out.printf("  %d --> %d : %d\n", 0, i, dist[i]);
+    
+                System.out.println();
+        }
+        in.close();
+    }
+}
+class Edge{
+    int s,d,w;
+    public Edge(int s,int d,int w){
+        this.s=s;
+        this.d=d;
+        this.w=w;
+    }
+}

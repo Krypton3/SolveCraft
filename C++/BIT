@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+using namespace std;
+int bitTree[100002];
+struct contestRank
+{
+    int c1,c2,c3;
+};
+bool cmp(const contestRank &a,const contestRank &b)
+{
+    return a.c1<b.c1;
+}
+void update(int i,int value,int n)
+{
+    while(i<=n){
+        bitTree[i]=min(bitTree[i],value);
+        i += (i & -i);
+    }
+}
+int readTree(int i)
+{
+    int preMin=INT_MAX;
+    while(i){
+        preMin=min(bitTree[i],preMin);
+        i -= (i & -i);
+    }
+    return preMin;
+}
+
+
+int main()
+{
+    int test;
+    scanf("%d",&test);
+    for(int p=1;p<=test;p++){
+        int n;
+        scanf("%d",&n);
+        contestRank ranks[n];
+        for(int i=0;i<n;i++){
+            scanf("%d%d%d",&ranks[i].c1,&ranks[i].c2,&ranks[i].c3);
+        }
+        sort(ranks,ranks+n,cmp);
+        fill(bitTree,bitTree+n+2,INT_MAX);
+        int excellent=0;
+        for(int i=0;i<n;i++){
+            int curr=readTree(ranks[i].c2);
+            if(curr>ranks[i].c3){
+                excellent++;
+            }
+            update(ranks[i].c2,ranks[i].c3,n);
+        }
+        printf("%d\n",excellent);
+    }
+    return 0;
+}

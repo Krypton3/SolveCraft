@@ -1,0 +1,106 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define MAX 100005
+int arr[MAX];
+int tree[3*MAX];
+int lazy[3*MAX];
+
+void build_tree(int node,int a,int b)
+{
+    if(a>b){
+        return;
+    }
+    if(a==b){
+        tree[node]=arr[a];
+        return;
+    }
+    int left=node*2;
+    int right=node*2+1;
+    int mid=(b+a)/2;
+    build_tree(left,a,mid);
+    build_tree(right,mid+1,b);
+    tree[node]=tree[left]+tree[right];
+}
+void update(int node, int start, int end, int l, int r, int val)
+{
+    if(lazy[node] != 0)
+    {
+        // This node needs to be updated
+        tree[node] += (end - start + 1) * lazy[node];    // Update it
+        if(start != end)
+        {
+            lazy[node*2] += lazy[node];                  // Mark child as lazy
+            lazy[node*2+1] += lazy[node];                // Mark child as lazy
+        }
+        lazy[node] = 0;                                  // Reset it
+    }
+    if(start > end or start > r or end < l)              // Current segment is not within range [l, r]
+        return;
+    if(start >= l and end <= r)
+    {
+        // Segment is fully within range
+        tree[node] += (end - start + 1) * val;
+        if(start != end)
+        {
+            // Not leaf node
+            lazy[node*2] += val;
+            lazy[node*2+1] += val;
+        }
+        return;
+    }
+    int mid = (start + end) / 2;
+    update(node*2, start, mid, l, r, val);        // Updating left child
+    update(node*2 + 1, mid + 1, end, l, r, val);   // Updating right child
+    tree[node] = tree[node*2] + tree[node*2+1];        // Updating root with max value
+}
+
+long long query(int node, int start, int end, int l, int r)
+{
+    if(start > end or start > r or end < l)
+        return 0;         // Out of range
+    if(lazy[node] != 0)
+    {
+        // This node needs to be updated
+        tree[node] += (end - start + 1) * lazy[node];            // Update it
+        if(start != end)
+        {
+            lazy[node*2] += lazy[node];         // Mark child as lazy
+            lazy[node*2+1] += lazy[node];    // Mark child as lazy
+        }
+        lazy[node] = 0;                 // Reset it
+    }
+    if(start >= l and end <= r)             // Current segment is totally within range [l, r]
+        return tree[node];
+    int mid = (start + end) / 2;
+    long long p1 = query(node*2, start, mid, l, r);         // Query left child
+    long long p2 = query(node*2 + 1, mid + 1, end, l, r); // Query right child
+    return (p1 + p2);
+}
+int main()
+{
+    int test;
+    long long ans,v;
+    scanf("%d",&test);
+    for(int p=1;p<=test;p++){
+        int n,c;
+        scanf("%d %d",&n,&c);
+        for(int i = 1; i <= n; i++){
+            arr[i] = 0;
+        }
+        build_tree(1, 1, n);
+        memset(lazy, 0, sizeof lazy);
+        for(int u=1;u<=c;u++){
+        int t,i,j;
+        scanf("%d %d %d",&t,&i,&j);
+        if(t==1){
+            ans=query(1,1,n,i,j);
+            printf("%lld\n",ans);
+        }else{
+            scanf("%lld",&v);
+            update(1,1,n,i,j,v);
+        }
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,66 @@
+//Uva 544
+#include<bits/stdc++.h>
+using namespace std;
+map<string,string> parent;
+struct Data
+{
+    string u,v;
+    int w;
+};
+bool cmp(Data a,Data b)
+{
+    return a.w>b.w;
+}
+string find(string str)
+{
+    if(parent[str] == "")
+    {
+        return str;
+    }
+    return parent[str] = find(parent[str]);
+}
+int main()
+{
+    int n,r;
+    Data edge;
+    vector<Data> edge_list;
+    string c1,c2,u,v;
+    int weight;
+    int k=0;
+    while(true){
+        scanf("%d %d",&n,&r);
+        if(n==0 && r==0){
+            break;
+        }
+        parent.clear();
+        edge_list.clear();
+        for(int i=0;i<r;i++){
+            cin>>c1;
+            cin>>c2;
+            cin>>weight;
+            edge.u=c1;edge.v=c2;edge.w=weight;
+            edge_list.push_back(edge);
+        }
+        cin>>c1;cin>>c2;
+        sort(edge_list.begin(), edge_list.end(), cmp);
+        int res=9999999;
+        for(int i=0;i<r;i++){
+            u = find(edge_list[i].u);
+            v = find(edge_list[i].v);
+            if(u != v){
+                parent[u] = v;
+                if(res > edge_list[i].w ){
+                    res = edge_list[i].w;
+                }
+            }
+
+            if(find(c1) == find(c2))
+            {
+                break;
+            }
+        }
+        printf("Scenario #%d\n", ++k);
+        printf("%d tons\n\n", res);
+    }
+    return 0;
+}

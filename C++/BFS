@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Graph
+{
+    int v;
+    list<int> *adj;
+public:
+    Graph(int v);
+    void addEdge(int v,int w);
+    void bfs(int s);
+};
+Graph::Graph(int v)
+{
+    this->v=v;
+    adj=new list<int>[v];
+}
+void Graph::addEdge(int v,int w)
+{
+    adj[v].push_back(w);
+}
+void Graph::bfs(int s)
+{
+    bool *visited=new bool[v];
+    for(int i=0;i<v;i++){
+        visited[i]=false;
+    }
+    list<int> queue;
+    visited[s]=true;
+    queue.push_back(s);
+    list<int>::iterator i;
+    while(!queue.empty())
+    {
+        s=queue.front();
+        cout<<s<<" ";
+        queue.pop_front();
+        for(i=adj[s].begin();i!=adj[s].end();i++){
+            if(!visited[*i]){
+                visited[*i]=true;
+                queue.push_back(*i);
+            }
+        }
+    }
+}
+int main()
+{
+    int test;
+    scanf("%d",&test);
+    for(int p=1;p<=test;p++){
+        int v,w;
+        scanf("%d%d",&v,&w);
+        Graph g(v);
+        for(int i=0;i<w;i++){
+            int a,b;
+            scanf("%d%d",&a,&b);
+            g.addEdge(a,b);
+        }
+        cout<<"The Breadth Search Will be: "<<endl;
+        int s;
+        scanf("%d",&s);
+        g.bfs(s);
+    }
+    return 0;
+}

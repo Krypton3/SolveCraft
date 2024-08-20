@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int test,num,b,x,y;
+    cin>>test;
+    for(int p=1;p<=test;p++){
+        cin>>num>>b>>x>>y;
+        int sum=0;
+        int c=1;
+        while(x!=0 || y!=0){
+            if(x==0){
+                sum+=((y%b)%b)*c;
+            }else if(y==0){
+                sum+=((x%b)%b)*c;
+            }else{
+                sum+=(((x%b)+(y%b))%b)*c;
+            }
+            x=x/b;
+            y=y/b;
+            c*=b;
+        }
+        cout<<num<<" "<<sum<<endl;
+    }
+    return 0;
+}

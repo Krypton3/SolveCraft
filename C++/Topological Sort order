@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define MAX 10005
+int M, N, arr[MAX];
+vector<int> num[MAX];
+vector<int> res;
+set<int> next;
+int main(){
+	int u, v;
+	scanf("%d%d", &N, &M);
+	for(int i=0; i<M; i++) {
+		scanf("%d %d", &u, &v);
+        num[u].push_back(v);
+		arr[v] += 1;
+	  }
+    for(int i=1; i<=N; i++){
+        if(arr[i]==0){
+            next.insert(i);
+        }
+    }
+    int c=0;
+    int p,q;
+    while(!next.empty()){
+        p=*next.begin();
+        next.erase(next.begin());
+        c++;
+        res.push_back(p);
+        for(int i=0; i!=num[p].size(); i++) {
+			q = num[p][i];
+			arr[q]--;
+			if(!arr[q]){
+                next.insert(q);
+			}
+		}
+    }
+    if(c!=N){
+        printf("Sandro fails.\n");
+    }else{
+        printf("%d",res[0]);
+        for(int i=1;i<N;i++){
+            printf(" %d",res[i]);
+        }
+        printf("\n");
+    }
+
+	return 0;
+}

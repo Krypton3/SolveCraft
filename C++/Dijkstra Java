@@ -1,0 +1,72 @@
+import java.io.*;
+import java.util.*;
+public class uva10986 {
+    static class Pair implements Comparable<Pair>{
+        int w;
+        int v;
+        public Pair(int first1, int second1){
+            w = first1;
+            v = second1;
+        }
+        @Override
+        public int compareTo(Pair o) {
+            if(w > o.w)
+                return 1;
+            else
+                return -1;
+        }
+    }
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder out = new StringBuilder();
+        int t = Integer.parseInt(br.readLine());
+        int n,m,st,end,w,v1,v2;
+        String [] sp;
+        int [] dist;
+        LinkedList<Pair> []AdjList;
+        PriorityQueue<Pair> pq = new PriorityQueue<Pair>();
+        for (int i = 0; i < t; i++) {
+            pq.clear();
+            sp = br.readLine().split(" ");
+            n = Integer.parseInt(sp[0]);
+            m = Integer.parseInt(sp[1]);
+            st = Integer.parseInt(sp[2]);
+            end = Integer.parseInt(sp[3]);
+            AdjList = new LinkedList[n];
+            dist = new int[n];
+            for (int j = 0; j < n; j++){
+                dist[j] = Integer.MAX_VALUE;
+                AdjList[j] = new LinkedList<Pair>();
+            }
+            for (int j = 0; j < m; j++) {
+                sp = br.readLine().split(" ");
+                v1 = Integer.parseInt(sp[0]);
+                v2 = Integer.parseInt(sp[1]);
+                w = Integer.parseInt(sp[2]);
+                AdjList[v1].add(new Pair(w, v2));
+                AdjList[v2].add(new Pair(w, v1));
+            }
+            dist[st] = 0;
+            pq.add(new Pair(0, st));
+            while(!pq.isEmpty()){
+                Pair front = pq.poll();
+                int d = front.w, u = front.v;
+                if(d == dist[u]){
+                    for (int j = 0; j < AdjList[u].size(); j++) {
+                        Pair v = AdjList[u].get(j);
+                        if(dist[u] + v.w < dist[v.v]){
+                            dist[v.v] = dist[u] + v.w;
+                            pq.add(new Pair(dist[v.v], v.v));
+                        }
+                    }
+                }
+            }
+            out.append("Case #"+(i+1)+": ");
+            if(dist[end] != Integer.MAX_VALUE)
+                out.append(dist[end] + "\n");
+            else
+                out.append("unreachable\n");
+        }
+        System.out.print(out);
+    }
+}

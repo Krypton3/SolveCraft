@@ -1,0 +1,140 @@
+//SPOJ HORRIBLE - Horrible Queries
+#include <queue>
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <bitset>
+#include <cstdlib>
+#include <list>
+#include <stack>
+#include <deque>
+#include <cmath>
+#include <string>
+#include <string.h>
+#include <iomanip>
+using namespace std;
+#define rep(i,n) for(int i = 0;  i < n ; ++i)
+#define REP(i,a,b) for(int i = a ; i <= b ; ++i)
+#define s(n) scanf("%d",&n)
+#define rev(i,n) for(int i = n ; i >= 0 ; --i)
+#define REV(i,a,b) for(int i = a ; i >= b ; --i)
+#define miN(a,b) (((a)<(b))?(a):(b))
+#define sc(n) scanf("%c",&n)
+#define tr(c,i) for(typeof((c).begin()) i=(c).begin();i!=(c).end();i++)
+#define INF 1000000000
+#define pp pair<int,int>
+#define pb(a) push_back(a)
+struct SegTree{
+        long long sum ;
+        long long update ;  
+};
+ 
+ 
+SegTree tree[4*100000] = {0} ;
+ 
+ 
+void build_tree(int node , int a , int b )
+{
+        tree[node].update = 0 ;
+        tree[node].sum = 0 ;
+        if(a == b)
+        {
+                tree[node].sum = 0 ;
+                return ;  
+        }
+        build_tree(2*node , a , (a+b)/2) ;
+        build_tree(2*node + 1 , (a+b)/2 + 1 , b) ;
+ 
+}
+ 
+void update(int node , int a , int b , int i , int j , long long v)
+{
+        if(tree[node].update)
+        {
+                tree[node].sum += tree[node].update*(b - a + 1) ;
+                if(a != b)
+                {
+                        tree[2*node].update += tree[node].update ;
+                        tree[2*node + 1].update += tree[node].update ;
+                }
+                tree[node].update = 0 ;
+        }
+        if(i > b || j < a)
+        {
+                return ;
+        }
+ 
+        if(a >= i && b <= j)
+        {
+                tree[node].sum += v*(b - a + 1) ;
+                if(a != b)
+                {
+                        tree[2*node].update += v ;
+                        tree[2*node + 1].update += v ;
+                }
+                return ;
+        }
+        update(2*node , a , (a+b)/2 , i , j , v) ;
+        update(2*node + 1 , (a+b)/2 + 1 , b , i , j , v) ;
+        tree[node].sum = tree[2*node].sum + tree[2*node + 1].sum ;
+ 
+}
+ 
+long long query(int node ,int a , int b , int i , int j)
+{
+        if(tree[node].update)
+        {
+                tree[node].sum += tree[node].update*(b - a + 1) ;
+                if(a != b)
+                {
+                        tree[2*node].update += tree[node].update ;
+                        tree[2*node + 1].update += tree[node].update ;
+                }
+                tree[node].update = 0 ;
+        }
+        if(i > b || j < a)
+        {
+                return 0;
+        }
+        if(a >= i && b <= j)
+        {
+                return tree[node].sum ;
+        }
+ 
+        return (query(2*node , a , (a+b)/2 , i , j) + query(2*node + 1 , (a+b)/2 + 1 , b , i , j)) ;
+}
+ 
+ 
+int main()
+{
+        //freopen("input.txt","r",stdin) ;
+        int N , type , x , y , Q;
+        long long v , ans;
+        int tc ;
+        s(tc);
+        while(tc--)
+        {
+                s(N) ;
+                build_tree(1,1,N) ;
+                s(Q) ;
+                while(Q--)
+                {
+                        s(type) ;
+                        s(x) ;
+                        s(y) ;
+                        if(type == 1)
+                        {
+                                ans = query(1,1,N,x,y) ;
+                                printf("%lld\n",ans) ;
+                        }
+                        else
+                        {
+                                scanf("%lld",&v) ;
+                                update(1,1,N,x,y,v) ;
+                        }
+                }
+        }
+        return 0 ;
+}

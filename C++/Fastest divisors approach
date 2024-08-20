@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+int main()
+{
+    ll C,R,num,i,p,test,sqt;
+    cin>>test;
+    for(p=1;p<=test;p++){
+        cin>>C>>R;
+        if(C==R){
+            cout<<"Case #"<<p<<": 0"<<endl;
+            continue;
+        }
+        set<ll> res;
+        set<ll>:: iterator z;
+        num=C-R;
+        sqt=sqrt(num);
+        for(i=1;i<=sqt;i++){
+            if(num%i==0){
+                if(i>R){
+                    res.insert(i);
+                }
+                if((num/i)>R){
+                    res.insert(num/i);
+                }
+            }
+        }
+        cout<<"Case #"<<p<<":";
+        for(z=res.begin();z!=res.end();z++){
+            cout<<" "<<*z;
+        }
+        cout<<endl;
+    }
+    return 0;
+}

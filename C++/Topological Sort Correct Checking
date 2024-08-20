@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n,m;
+int y[1005];
+
+struct Pair
+{
+    int a;
+    int b;
+    Pair(int s,int p){
+        a=s;
+        b=p;
+    }
+};
+vector<Pair> v;
+int main()
+{
+    while(scanf("%d%d",&n,&m)==2){
+        int t=1;
+        v.clear();
+        for(int i=0;i<m;i++){
+            int p,q;
+            scanf("%d %d",&p,&q);
+            v.push_back(Pair(p,q));
+        }
+        for(int i=0;i<n;i++){
+            int num;
+            scanf("%d",&num);
+            y[num]=i;
+        }
+        for(int i=0;i<n;i++){
+            Pair p=v[i];
+            printf("pair %d %d %d\n",p,p.a,p.b);
+            printf("pair %d %d\n",y[p.a],y[p.b]);
+            if(y[p.a]>y[p.b]){
+                t=0;
+                break;
+            }
+        }
+        if(t){
+            printf("YES\n");
+        }else{
+            printf("NO\n");
+        }
+    }
+    return 0;
+}

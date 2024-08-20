@@ -1,0 +1,41 @@
+
+import java.util.*;
+public class LongestCommonSubsequence {
+	public static void main(String[] args) {
+		@SuppressWarnings("resource")
+		Scanner in=new Scanner(System.in);
+		System.out.println("Enter First String : ");
+		String a=in.next();
+		System.out.println("Enter second String : ");
+		String b=in.next();
+		LCS(a,b);
+	}
+
+	private static void LCS(String a, String b) {
+		int[][] array=new int[a.length()+1][b.length()+1];
+		for(int i=a.length()-1;i>=0;i--){
+			for(int j=b.length()-1;j>=0;j--){
+				if(a.charAt(i)==b.charAt(j)){
+					array[i][j]=array[i+1][j+1]+1;
+				}else{
+					array[i][j]=Math.max(array[i+1][j], array[i][j+1]);
+				}
+			}
+		}
+		String name="";
+		int r=0;
+		int c=0;
+		while(r<a.length() && c<b.length()){
+			if(a.charAt(r)==b.charAt(c)){
+				name=name+a.charAt(r);
+				r++;
+				c++;
+			}else if(array[r+1][c]>=array[r][c+1]){
+				r++;
+			}else{
+				c++;
+			}
+		}
+		System.out.println("String : "+name+" and length : "+name.length());
+	}
+}

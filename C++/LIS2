@@ -1,0 +1,56 @@
+#include<bits/stdc++.h>
+using namespace std;
+int arr[100000],dp[100000],pre[100000],store[100000];
+int main()
+{
+    int Test,t,i,j,top,max,final;
+    char s[100],watch;
+    scanf(" %d",&Test);
+    scanf("%c",&watch);
+    gets(s);
+    for(t=0;t<Test;t++){
+        if(t!=0){
+            printf("\n");
+        }
+        top=max=0;
+        while(gets(s)){
+            if(strcmp(s,"")==0){
+                break;
+            }
+            sscanf(s," %d",&arr[top++]);
+        }
+        for(i=0;i<top;i++)
+            dp[i]=1;
+        memset(pre,-1,sizeof(pre));
+        if(top>0){
+            max=1;
+        }
+        final=top-1;
+        for(i=0;i<top;i++){
+            for(j=i+1;j<top;j++){
+                if(arr[j]>arr[i]){
+                    if(dp[j]<dp[i]+1){
+                        dp[j]=dp[i]+1;
+                        pre[j]=i;
+                        if(dp[j]>=max){
+                            max=dp[j];
+                            final=j;
+                        }
+                    }
+                }
+            }
+        }
+        printf("Max hits: %d\n",max);
+        if(max==0){
+           continue;
+        }
+        int k=0;
+        for(i=final;i!=-1;i=pre[i]){
+            store[k++]=i;
+        }
+        for(i=k-1;i>=0;i--){
+            printf("%d\n",arr[store[i]]);
+        }
+
+    }
+}

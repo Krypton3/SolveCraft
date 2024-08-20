@@ -1,0 +1,67 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Graph
+{
+    int V;
+    list<int> *adj;
+    void toposort(int v,bool visited[],stack<int> &stack);
+public:
+    Graph(int V);
+    void addEdge(int v,int w);
+    void topologicalsort();
+};
+Graph::Graph(int V)
+{
+    this->V=V;
+    adj=new list<int>[V];
+}
+void Graph::addEdge(int v,int w)
+{
+    adj[v].push_back(w);
+}
+void Graph::toposort(int v,bool visited[],stack<int> &stack)
+{
+    visited[v]=true;
+    list<int>::iterator i;
+    for(i=adj[v].begin();i!=adj[v].end();i++){
+        if(!visited[*i]){
+            toposort(*i,visited,stack);
+        }
+    }
+    stack.push(v);
+}
+void Graph::topologicalsort()
+{
+    stack<int> stack;
+    bool *visited=new bool[V];
+    for(int i=0;i<V;i++){
+        visited[i]=false;
+    }
+    for(int i=0;i<V;i++){
+        if(!visited[i]){
+            toposort(i,visited,stack);
+        }
+    }
+    while(stack.empty()==false){
+        cout<<stack.top()<<" ";
+        stack.pop();
+    }
+}
+int main()
+{
+    int test;
+    scanf("%d",&test);
+    for(int p=1;p<=test;p++){
+        int v,w;
+        scanf("%d%d",&v,&w);
+        Graph g(v);
+        for(int i=0;i<w;i++){
+            int a,b;
+            scanf("%d%d",&a,&b);
+            g.addEdge(a,b);
+        }
+        cout<<"The Topological Sort Will be: "<<endl;
+        g.topologicalsort();
+    }
+    return 0;
+}
