@@ -1,3 +1,4 @@
+# https://www.geeksforgeeks.org/stock-buy-sell/
 def max_profit(arr):
     profit = 0
     for i in range(1, len(arr)):

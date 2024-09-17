@@ -1,3 +1,4 @@
+# https://www.geeksforgeeks.org/problems/reverse-a-linked-list/1
 class Node:
     def __init__(self, data):
         self.data = data
